@@ -9,87 +9,95 @@
 </head>
 <body><script type="text/javascript" src="https://ad.netowl.jp/js/star-php.js"></script>
   
-  <div class="bg-white py-6 sm:py-8 lg:py-12">
+  <div class="bg-[url(haikei.png)] py-6 sm:py-8 lg:py-12">
   <div class="mx-auto max-w-screen-2xl px-4 md:px-8">
-    <a href="" class="inline-flex items-center gap-2.5 text-2xl font-bold text-black md:text-3xl" aria-label="logo">
+    <a href="" class="inline-flex items-center gap-2.5 text-2xl font-bold text-white md:text-3xl" aria-label="logo">
             <img  class="h-10 w-10 text-indigo-500" fill="currentColor" src="https://img.atwiki.jp/discordtroll/attach/10/1/651e152f7fdd57d9f02502b0a367cb35.webp" style="border-radius:50%;"></img>
     CCCP
     </a>
-    <div class="text-center"><p class="text-4xl ...　">AARRではない</p><a href="https://www.youtube.com/watch?v=ThEiVtjplUA">詳しい使い方はここを押せ(YouTube解説)</a>押さないでくださいは押して大丈夫です</div>
+    <div class="text-center text-white"><p class="text-4xl ">AARRではない</p><a href="https://www.youtube.com/watch?v=ThEiVtjplUA">詳しい使い方はここを押せ(YouTube解説)</a>押さないでくださいは押して大丈夫です</div>
     <form id="botForm" method="post">
-      
+      <div class="text-white">
       <div class="sm:col-span-2">
-        <label for="token" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">BOTトゥークン</label>
-        <input type="text"value="MTI......." id="token"name="token"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label for="token" class="mb-2 inline-block text-sm text-white sm:text-base">BOTトゥークン</label>
+        <input type="text"value="" id="token"name="token"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div class="sm:col-span-2">
-        <label for="serverId" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Server ID</label>
+        <label for="serverId" class="mb-2 inline-block text-sm text-white sm:text-base">Server ID</label>
         <input type="text"id="serverId"required="いれろ" name="serverId"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div class="sm:col-span-2">
-        <label for="serverName" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Server NAME</label>
+        <label for="serverName" class="mb-2 inline-block text-sm text-white sm:text-base">Server NAME</label>
         <input type="text"required="いれろ" id="serverName"name="serverName"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 
       <div class="sm:col-span-2">
-        <label for="message" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">Message</label>
+        <label for="message" class="mb-2 inline-block text-sm text-white sm:text-base">Message</label>
         <textarea name="message" class="h-64 w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring"></textarea>
       </div>
 
-<label for="message" required="いれろ" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">all ban</label>
+<label for="message" required="いれろ" class="mb-2 inline-block text-sm text-white sm:text-base">all ban</label>
 <div class="flex items-center justify-between sm:col-span-2">
   <label class="inline-flex relative items-center cursor-pointer">
     <input type="checkbox" id="banUsers" name="banUsers" class="sr-only peer">
-    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-red-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
+    <div class="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:bg-blue-500 after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:after:translate-x-full peer-checked:after:border-white"></div>
   </label>
 </div>
     <div class="sm:col-span-2">
-        <label for="iconn" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">ICON</label>
-        <input type="text"value="アイコン"id="iconn"name="iconn"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
+        <label for="iconn" class="mb-2 inline-block text-sm text-white sm:text-base">ICON</label>
+        <input type="text"value="wa.png"id="iconn"name="iconn"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 <br>
 
  <div class="sm:col-span-2">
-        <label for="iconn" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">ちゃんねるめい</label>
+        <label for="iconn" class="mb-2 inline-block text-sm text-white sm:text-base">ちゃんねるめい</label>
         <input type="text"value="おにゃんこ攻撃"required="いれろ" id="chna"name="chna"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 <br>
       <div class="flex items-center justify-between sm:col-span-2">
-        <button type="submit"class="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base">FIREEEEEEEEEEEEEEEEEEEEEEEEEEEEE</button>
+        <button type="submit"class="inline-block rounded-lg bg-blue-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-blue-500 transition duration-100 hover:bg-blue-400 focus-visible:ring active:bg-blue-500 md:text-base">FIREEEEEEEEEEEEEEEEEEEEEEEEEEEEE</button>
       </div>
     </form>
     <br>
 	
 	
 	   <div class="sm:col-span-2"> 
-        <label for="serverName" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">bot 招待ユーアールエル作成（bot idが必要）</label>
+        <label for="serverName" class="mb-2 inline-block text-sm text-white sm:text-base">bot 招待ユーアールエル作成（bot idが必要）</label>
         <input type="text" id="bot-id"placeholder="ボットのユゥザーアイディー"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 <br>
 	  <div class="flex items-center justify-between sm:col-span-2">
-        <button id="generate-button"class="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base">押さないでください</button>
+        <button id="generate-button"class="inline-block rounded-lg bg-blue-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-blue-300 transition duration-100 hover:bg-blue-400 focus-visible:ring active:bg-blue-500 md:text-base">押さないでください</button>
       </div>
 <br>
 <div class="sm:col-span-2">
-        <label for="serverinfo" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">トゥーくんからbotのid生成（トークン生存確認）</label>
+        <label for="serverinfo" class="mb-2 inline-block text-sm text-white sm:text-base">トゥーくんからbotのid生成（トークン生存確認）</label>
         <input type="text" id="bottoken"placeholder="botのトゥーくんをいれなさい&#128576;"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
 <br>
 	  <div class="flex items-center justify-between sm:col-span-2">
-        <button id="getBotId" class="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base">押さないでください</button>
+        <button id="getBotId" class="inline-block rounded-lg bg-blue-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-blue-300 transition duration-100 hover:bg-blue-400 focus-visible:ring active:bg-blue-500 md:text-base">押さないでください</button>
       </div>
 <br>
-<p id="botInfo"></p>
+<div role="alert">
+  <div class="bg-blue-500 text-white font-bold rounded-t px-4 py-2">
+    Danger
+  </div>
+  <div class="border border-t-0 border-blue-300 rounded-b bg-blue-100 px-4 py-3 text-blue-700">
+<p class=""id="botInfo"></p>
+  </div>
+</div>
 <br>
-<!-- webhook spam-->
+
+
 <div class="sm:col-span-2"> 
        <h3 class="mb-2 text-lg font-semibold md:text-xl">webふぅくんスパム</h3>
-	    <label for="serverName" class="mb-2 inline-block text-sm text-gray-800 sm:text-base">webhook url</label>
+	    <label for="serverName" class="mb-2 inline-block text-sm text-white sm:text-base">webhook url</label>
         <input type="text" id="wurl"placeholder="うぇぶフクurlプリィーズ"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
 
-<label for="message">NAME</label><br>
+<label for="message"class="">NAME</label><br>
 
 <input type="text" id="wname"placeholder="ウェブフックのお名前"class="w-full rounded border bg-gray-50 px-3 py-2 text-gray-800 outline-none ring-indigo-300 transition duration-100 focus:ring" />
       </div>
@@ -104,11 +112,23 @@
 <br>
 <br>
 	  <div class="flex  justify-start sm:col-span-2">
-        <button onclick="sendMessage()" class="inline-block rounded-lg bg-red-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-red-300 transition duration-100 hover:bg-red-600 focus-visible:ring active:bg-red-700 md:text-base">押さないでください</button>
-        <button onclick="stopMessage()" class="inline-block rounded-lg bg-gray-500 ml-4 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-300 transition duration-100 hover:bg-gray-600 focus-visible:ring active:bg-gray-700 md:text-base">押してください（停止）</button>
+        <button onclick="sendMessage()" class="inline-block rounded-lg bg-blue-500 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-blue-300 transition duration-100 hover:bg-blue-400 focus-visible:ring active:bg-blue-500 md:text-base">押さないでください</button>
+        <button onclick="stopMessage()" class="inline-block rounded-lg bg-gray-500 ml-4 px-8 py-3 text-center text-sm font-semibold text-white outline-none ring-gray-200 transition duration-100 hover:bg-gray-600 focus-visible:ring active:bg-gray-500 md:text-base">押してください（停止）</button>
     </div>
+</div>
 
-        <div class="font-bold text-xl"id="response"></div>
+<div role="alert">
+  <div class="bg-blue-500 text-white font-bold rounded-t px-4 py-2">
+    Danger
+  </div>
+  <div class="border border-t-0 border-blue-300 rounded-b bg-blue-100 px-4 py-3 text-blue-700">
+      <div class="font-bold text-xl"id="response"></div>
+  </div>
+</div>
+<br>
+
+
+
 
     <div class="flex divide-x rounded-lg border bg-gray-50 mt-4">
       <div class="flex items-center p-2 text-indigo-500 md:p-4">
@@ -123,6 +143,7 @@
         <p class="text-gray-500">安全で低速、簡単なツールができたニャ 質問とか喧嘩売りたい人はdiscord @ctkp.aarr.もしくわ、、、、twitter @ctkp_aarr</p>
 			<p>よびとーくん</p>
 <div style="word-break: break-all;">
+<!-- 本来ここにbotのtokenを置いています -->
       </div></div>
     </div>
 </body>
@@ -401,5 +422,4 @@ echo "<h1>すべての処理が完了しました（メッセージ・BAN・ロ�
 }
 }
 ?>
-
 
